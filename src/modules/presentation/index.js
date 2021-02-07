@@ -46,7 +46,7 @@ TextEditor.editor = monaco.editor.create(document.getElementById('text_editor'),
 monaco.editor.setTheme(XSB_THEME)
 
 // Lint code 2 times a second after 1 second (give XSB time to start)
-setTimeout(() => setInterval(TextEditor.lint, 500), 1000);
+//setTimeout(() => setInterval(TextEditor.lint, 500), 1000);
 
 // Register file_input event
 document.getElementById('file_input').onchange = Menubar.fileInputClicked;
