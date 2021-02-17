@@ -6,20 +6,33 @@ server = Flask(__name__)
 @server.route("/<path:file>")
 def generic_response(file):
 	# The XSB Terminal library currently assumes all library files are at root.
-	if "xsbInterface" in file or "xsbTerminal" in file:	# If a file from the xsbInterface or xsbTerminal is requested, then send it from ./src/modules/terminal. 
+	if "xsbInterface" in file or "xsbTerminal" in file :	# If a file from the xsbInterface or xsbTerminal is requested, then send it from ./src/modules/terminal. 
 		if ".wasm" in file: # Manually send file with mimetype according to extension (Flask mimetype inference is bad)
+
 			u = send_from_directory('./src/modules/terminal/', file, mimetype="application/wasm")
+			u.headers.set('Cross-Origin-Opener-Policy','same-origin')
+			u.headers.set('Cross-Origin-Embedder-Policy','require-corp')
 
 			return u
 		elif ".js" in file:
 			u = send_from_directory('./src/modules/terminal/', file, mimetype="text/javascript")
+			u.headers.set('Cross-Origin-Opener-Policy','same-origin')
+			u.headers.set('Cross-Origin-Embedder-Policy','require-corp')
 			
 			return u
 		u = send_from_directory('./src/modules/terminal/', file)
+		u.headers.set('Cross-Origin-Opener-Policy','same-origin')
+		u.headers.set('Cross-Origin-Embedder-Policy','require-corp')
+		
 		
 		return u
-	
-	u= send_from_directory("./src/", file)
+
+
+	else:
+		u= send_from_directory("./src/", file)
+		u.headers.set('Cross-Origin-Opener-Policy','same-origin')
+		u.headers.set('Cross-Origin-Embedder-Policy','require-corp')		
+		
 
 	
 	return u
@@ -31,7 +44,7 @@ def home():
 	
 	u.headers.set('Cross-Origin-Opener-Policy','same-origin')
 	u.headers.set('Cross-Origin-Embedder-Policy','require-corp')
-	u.headers.set('X-Content-Type-Options', 'nosniff')
+	##u.headers.set('X-Content-Type-Options', 'nosniff')
 
 	return u
 

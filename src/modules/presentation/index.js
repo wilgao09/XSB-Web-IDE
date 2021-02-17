@@ -45,6 +45,18 @@ TextEditor.editor = monaco.editor.create(document.getElementById('text_editor'),
 
 monaco.editor.setTheme(XSB_THEME)
 
+// Set it so that linting only takes place 
+// - once a second
+// - NOT when there is no input change
+// let linted = true;
+// setInterval(()=>{linted=false},1000)
+// model.onDidChangeContent((evt) => {
+// 	if (!linted) {
+// 		TextEditor.lint(); 
+// 		linted=true;
+// 	}
+// })
+
 // Lint code 2 times a second after 1 second (give XSB time to start)
 //setTimeout(() => setInterval(TextEditor.lint, 500), 1000);
 

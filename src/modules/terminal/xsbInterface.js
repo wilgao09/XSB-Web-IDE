@@ -183,7 +183,7 @@ XSB.LowLevel.xsb_get_init_error_message = function()
 XSB.LowLevel.xsb_get_error_message = function()
 {
 	// Return the string at the located specified by the char* returned by __xsb_get_init_error_message() truncated at the first null terminator
-	return UTF8ToString(Module.__xsb_get_error_message())
+	return CustomFix.Uint8ArrayToStr(Module.__xsb_get_error_message())
 }
 
 /**
@@ -309,8 +309,10 @@ XSB.execute = function(command)
 			_status.shift()
 			_status[1] = xsbStatusToBool(XSB.LowLevel.status())
 
-			if(error = XSB.LowLevel.xsb_get_error_message())
-				throw "XSB-JS-INTERFACE ERROR: " + error
+			if(error = XSB.LowLevel.xsb_get_error_message()) {
+				// throw "XSB-JS-INTERFACE ERROR: " + error
+				console.log(error)
+			}
 
 			// Append variable values to result.var[]
 			appendToResult(nextResult, ',')
@@ -325,7 +327,7 @@ XSB.execute = function(command)
 		result.isTrue = xsbStatusToBool(XSB.LowLevel.status())
 
 		// Close XSB query
-		XSB.LowLevel.xsb_close_query();
+		// XSB.LowLevel.xsb_close_query();
 	}
 
 	return result
@@ -346,3 +348,22 @@ XSB.init = function()
 	}, 1000)	
 }
 
+
+
+
+
+var CustomFix = {
+	Uint8ArrayToStr: ()=>{}
+}
+
+
+CustomFix.Uint8ArrayToStr = (addr) => {
+	var memory = Module.HEAPU8;
+	let buffer = new Uint8Array(memory.buffer, addr, memory.buffer.byteLength - addr);
+	let term = buffer.indexOf(0);
+
+	var totalString = "";
+
+	buffer.subarray(0, term).forEach((c) => {totalString += String.fromCharCode(c)});
+	return totalString
+}

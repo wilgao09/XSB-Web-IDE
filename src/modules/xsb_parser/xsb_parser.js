@@ -276,6 +276,7 @@ XSBParser.parse = function(script)
 
 			// Set message to all XSB output and reset queue
 			output.error.message = stdoutBuffer.reduce((a, b) => a + "\n" + b, "");
+			console.log(result)
 
 			break;
 		}
